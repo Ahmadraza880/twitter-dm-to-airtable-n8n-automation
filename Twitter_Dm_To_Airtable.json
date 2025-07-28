@@ -1,0 +1,246 @@
+{
+  "name": "Twitter_Dm_To_Airtable",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "twitter-dm-receive",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -100,
+        -160
+      ],
+      "id": "509453e7-5750-4cee-877e-61ca59315bca",
+      "name": "Trigger - Twitter DM",
+      "webhookId": "932b78c4-ea07-4c31-a94e-f66e555dc695"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4a1bac43-1f74-49d8-a182-a552360c0d8f",
+              "name": "Sender",
+              "value": "={{ $json.body.sender }}",
+              "type": "string"
+            },
+            {
+              "id": "5b79cd30-56ff-4368-9896-fd2e16d9ef2b",
+              "name": "Message",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "c14e4cbd-37e8-4cfd-8908-425d5278df20",
+              "name": "Timestamp",
+              "value": "={{ $json.body.timestamp }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        120,
+        20
+      ],
+      "id": "f76f6f83-b595-41ef-a799-e725e9d41ed2",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const input = item.json;\n  const date = new Date(input.Timestamp);\n\n  // Format: MM/DD/YYYY\n  const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;\n\n  return {\n    json: {\n      Sender: input.Sender,\n      Message: input.Message,\n      Timestamp: formattedDate,\n      MessageLength: input.Message.length,\n      DayOfWeek: date.toLocaleDateString('en-US', { weekday: 'long' }),\n    \n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        -160
+      ],
+      "id": "a7831b51-3410-4b3b-8a29-2f8937ebd335",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appj8A30MDcqPw2Hh",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblFh4O4NptLt1ViM",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Sender": "={{ $json.Sender }}",
+            "Message": "={{ $json.Message }}",
+            "Timestamp": "={{ $json.Timestamp }}"
+          },
+          "matchingColumns": [
+            "Sender",
+            "Message",
+            "Timestamp",
+            "Message Length",
+            "Day of Week",
+            "Sentiment Analysis",
+            "Summary"
+          ],
+          "schema": [
+            {
+              "id": "Sender",
+              "displayName": "Sender",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message Length",
+              "displayName": "Message Length",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Day of Week",
+              "displayName": "Day of Week",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Sentiment Analysis",
+              "displayName": "Sentiment Analysis",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        540,
+        20
+      ],
+      "id": "d13e8dd7-edf5-47a6-a8ed-f57b3202dfc1",
+      "name": "Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "3Vej5iwqoYaL9icy",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Trigger - Twitter DM": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "d1965b6c-c58b-4015-a19c-39f4ac0d5f95",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2de80f5914130ddac7b892de4e5de570f30cd22f0b2bd794e45e389d7524d1e9"
+  },
+  "id": "izbzi4bqNXHGPEYd",
+  "tags": []
+}
