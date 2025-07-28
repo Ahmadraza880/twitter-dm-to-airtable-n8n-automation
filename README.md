@@ -33,7 +33,10 @@ This project automates the collection of Twitter direct messages (DMs) and logs 
 
 ## 📸 Screenshots
 
-> *Add screenshots of your n8n workflow, Airtable base, or node configurations here (e.g., `![Workflow](screenshots/workflow.png)`).*
+> <img width="1318" height="578" alt="image" src="https://github.com/user-attachments/assets/9faca4f2-db13-4bf4-9944-d6237c3f340d" />
+> <img width="1879" height="517" alt="image" src="https://github.com/user-attachments/assets/88948997-e519-4297-aea4-8ec8322914df" />
+><img width="988" height="603" alt="image" src="https://github.com/user-attachments/assets/935a90b9-20c8-4980-a541-708896808c2c" />
+
 
 ## 🔄 Workflow Breakdown
 
